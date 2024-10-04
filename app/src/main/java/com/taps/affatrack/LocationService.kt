@@ -1,15 +1,11 @@
 package com.taps.affatrack
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -40,32 +36,10 @@ class LocationService : Service() {
             }
         }
 
-        startForegroundService()
-        startLocationUpdates()
+        startLocationUpdates() // Llamar a startLocationUpdates directamente
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
-
-    private fun startForegroundService() {
-        val channelId = "location_channel"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Servicio de Localización",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notification: Notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Servicio de Localización Activo")
-            .setContentText("Obteniendo tu ubicación")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .build()
-
-        startForeground(1, notification)
-    }
 
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.create().apply {
@@ -118,5 +92,4 @@ class LocationService : Service() {
             }
         }.start()
     }
-
 }
