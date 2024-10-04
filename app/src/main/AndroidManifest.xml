@@ -55,7 +55,8 @@
             </intent-filter>
 
         </activity>
-
+        <activity android:name=".DummyActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

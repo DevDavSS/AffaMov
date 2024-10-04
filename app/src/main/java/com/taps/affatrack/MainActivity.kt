@@ -159,11 +159,26 @@ class MainActivity : ComponentActivity() {
         val packageManager = applicationContext.packageManager
         val componentName = ComponentName(applicationContext, MainActivity::class.java)
 
-        // Deshabilitar el Launcher (MainActivity)
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            PackageManager.DONT_KILL_APP
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+            packageManager.setComponentEnabledSetting(
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        } else {
+
+            val intent = Intent(this, DummyActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+
+
+            packageManager.setComponentEnabledSetting(
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        }
     }
+
 }
