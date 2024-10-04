@@ -1,6 +1,7 @@
 package com.taps.affatrack
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -11,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -142,6 +144,26 @@ class MainActivity : ComponentActivity() {
             ) {
                 Text("Save URL and Start Service")
             }
+
+            Button(
+                onClick = {hideApp()}
+
+            ) {
+                Text("Hide app")
+            }
+
         }
+    }
+
+    private fun hideApp() {
+        val packageManager = applicationContext.packageManager
+        val componentName = ComponentName(applicationContext, MainActivity::class.java)
+
+        // Deshabilitar el Launcher (MainActivity)
+        packageManager.setComponentEnabledSetting(
+            componentName,
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 }
