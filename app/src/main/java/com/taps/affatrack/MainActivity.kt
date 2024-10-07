@@ -14,6 +14,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -117,40 +120,58 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF97b6a7), shape = RoundedCornerShape(8.dp))
+                .background(Color(0xFF000000), shape = RoundedCornerShape(8.dp))
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
                 value = url.value,
-                onValueChange = { url.value = it },  // Update the URL state when text changes
+                onValueChange = { url.value = it },
                 label = { Text("Enter the URL") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.White
                 )
             )
-            Button(
-                onClick = {
-                    // Save the URL to SharedPreferences and start the location service
-                    val sharedPreferences: SharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
-                    with(sharedPreferences.edit()) {
-                        putString("server_url", url.value)
-                        apply()
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .background(Color.Black, shape = RoundedCornerShape(8.dp))
+                    .border(2.dp, Color.Red, shape = RoundedCornerShape(8.dp))
+                    .clickable {
+
+                        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putString("server_url", url.value)
+                            apply()
+                        }
+                        startLocationService()
                     }
-                    startLocationService()
-                },
-                modifier = Modifier.padding(top = 16.dp)
+                    .padding(16.dp)
             ) {
-                Text("Save URL and Start Service")
+                Text(
+                    text = "Start Tracking",
+                    color = Color.White
+                )
             }
 
-            Button(
-                onClick = {hideApp()}
 
+            Box(
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .background(Color.Black, shape = RoundedCornerShape(15.dp))
+                    .border(2.dp, Color.Red, shape = RoundedCornerShape(15.dp))
+                    .clickable {
+                        hideApp()
+                    }
+                    .padding(16.dp)
             ) {
-                Text("Hide app")
+                Text(
+                    text = "Hide",
+                    color = Color.White
+                )
             }
+
 
         }
     }
